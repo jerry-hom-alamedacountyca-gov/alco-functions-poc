@@ -1,11 +1,11 @@
 {
   "@odata.context": "https://alexz1008-ais-hrs.search.windows.net/$metadata#indexers/$entity",
-  "@odata.etag": "\"0x8DEBC3B1A13032A\"",
+  "@odata.etag": "\"0x8DED08DAD4B261D\"",
   "name": "hrs-rag-indexer",
   "description": null,
   "dataSourceName": "hrs-rag-datasource",
   "skillsetName": "hrs-rag-skillset",
-  "targetIndexName": "hrs-rag",
+  "targetIndexName": "hrs-rag-1",
   "disabled": null,
   "schedule": null,
   "parameters": {

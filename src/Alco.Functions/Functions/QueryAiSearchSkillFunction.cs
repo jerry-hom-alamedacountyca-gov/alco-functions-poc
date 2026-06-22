@@ -50,11 +50,23 @@ public sealed class QueryAiSearchSkillFunction(SearchClientFactory searchClientF
         try
         {
             var searchClient = searchClientFactory.CreateClient();
+            var top = NormalizeSize(queryRequest.Top);
             var searchOptions = new SearchOptions
             {
                 Filter = SearchFilterBuilder.BuildContractIdFilter(queryRequest.ContractId),
                 IncludeTotalCount = true,
-                Size = NormalizeSize(queryRequest.Top)
+                Size = top,
+                VectorSearch = new VectorSearchOptions
+                {
+                    Queries =
+                    {
+                        new VectorizableTextQuery(queryRequest.Query)
+                        {
+                            Fields = { "text_vector" },
+                            KNearestNeighborsCount = top
+                        }
+                    }
+                }
             };
             searchOptions.Select.Add("chunk");
             searchOptions.Select.Add("title");

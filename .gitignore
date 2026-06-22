@@ -187,6 +187,26 @@ DocProject/Help/html
 # Click-Once directory
 publish/
 
+# Local publish/deploy artifacts
+publish_out/
+publish-output/
+deploy.zip
+index-info.txt
+
+# Local diagnostic and test scripts (may contain API keys)
+check-index-docs.ps1
+check-indexer-status.ps1
+deploy.ps1
+diagnose.ps1
+fix-projection-target.ps1
+get-index-info.ps1
+rebuild-index.ps1
+run-indexer.ps1
+test-contract-skill.ps1
+test-direct-filter.ps1
+test-foundry-call.ps1
+test-query.ps1
+
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
