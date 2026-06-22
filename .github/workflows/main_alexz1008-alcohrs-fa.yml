@@ -32,9 +32,7 @@ jobs:
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: bash
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration Release --output ./output
-          popd
+          dotnet build src/Alco.Functions --configuration Release --output ./output
       
       - name: Login to Azure
         uses: azure/login@v2
