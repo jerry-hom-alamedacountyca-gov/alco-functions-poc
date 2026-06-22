@@ -53,7 +53,7 @@
       "synonymMaps": []
     },
     {
-      "name": "caseId",
+      "name": "contractId",
       "type": "Edm.String",
       "searchable": false,
       "filterable": true,

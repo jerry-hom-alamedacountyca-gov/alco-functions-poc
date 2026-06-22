@@ -17,15 +17,15 @@ public sealed class QueryAiSearchSkillFunction(SearchClientFactory searchClientF
 {
     [Function("QueryAiSearchSkill")]
     [OpenApiOperation(
-        operationId: "QueryCaseDocuments",
+        operationId: "QueryContractDocuments",
         tags: ["Search"],
-        Summary = "Search documents for a case",
-        Description = "Performs a semantic search over indexed document chunks scoped to a specific case ID. Returns the most relevant text chunks along with their source file metadata.",
+        Summary = "Search documents for a contract",
+        Description = "Performs a semantic search over indexed document chunks scoped to a specific contract ID. Returns the most relevant text chunks along with their source file metadata.",
         Visibility = OpenApiVisibilityType.Important)]
     [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-    [OpenApiRequestBody("application/json", typeof(QueryAiSearchRequest), Required = true, Description = "The search query and case ID to scope results to.")]
-    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(QueryAiSearchResponse), Description = "Matching document chunks for the case.")]
-    [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(object), Description = "query or caseId was missing or invalid.")]
+    [OpenApiRequestBody("application/json", typeof(QueryAiSearchRequest), Required = true, Description = "The search query and contract ID to scope results to.")]
+    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(QueryAiSearchResponse), Description = "Matching document chunks for the contract.")]
+    [OpenApiResponseWithBody(HttpStatusCode.BadRequest, "application/json", typeof(object), Description = "query or contractId was missing or invalid.")]
     public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData request,
         CancellationToken cancellationToken)
@@ -42,9 +42,9 @@ public sealed class QueryAiSearchSkillFunction(SearchClientFactory searchClientF
             return await CreateJsonResponseAsync(request, HttpStatusCode.BadRequest, new { error = "The request body must be valid JSON." }, cancellationToken).ConfigureAwait(false);
         }
 
-        if (queryRequest is null || string.IsNullOrWhiteSpace(queryRequest.Query) || string.IsNullOrWhiteSpace(queryRequest.CaseId))
+        if (queryRequest is null || string.IsNullOrWhiteSpace(queryRequest.Query) || string.IsNullOrWhiteSpace(queryRequest.ContractId))
         {
-            return await CreateJsonResponseAsync(request, HttpStatusCode.BadRequest, new { error = "Both query and caseId are required." }, cancellationToken).ConfigureAwait(false);
+            return await CreateJsonResponseAsync(request, HttpStatusCode.BadRequest, new { error = "Both query and contractId are required." }, cancellationToken).ConfigureAwait(false);
         }
 
         try
@@ -52,24 +52,24 @@ public sealed class QueryAiSearchSkillFunction(SearchClientFactory searchClientF
             var searchClient = searchClientFactory.CreateClient();
             var searchOptions = new SearchOptions
             {
-                Filter = SearchFilterBuilder.BuildCaseIdFilter(queryRequest.CaseId),
+                Filter = SearchFilterBuilder.BuildContractIdFilter(queryRequest.ContractId),
                 IncludeTotalCount = true,
                 Size = NormalizeSize(queryRequest.Top)
             };
             searchOptions.Select.Add("chunk");
             searchOptions.Select.Add("title");
-            searchOptions.Select.Add("caseId");
+            searchOptions.Select.Add("contractId");
             searchOptions.Select.Add("fileName");
 
             var results = await searchClient.SearchAsync<SearchDocument>(queryRequest.Query, searchOptions, cancellationToken).ConfigureAwait(false);
-            var documents = new List<CaseSearchResult>();
+            var documents = new List<ContractSearchResult>();
             await foreach (var result in results.Value.GetResultsAsync())
             {
-                documents.Add(new CaseSearchResult
+                documents.Add(new ContractSearchResult
                 {
                     Chunk = result.Document.TryGetValue("chunk", out var chunk) ? chunk?.ToString() ?? string.Empty : string.Empty,
                     Title = result.Document.TryGetValue("title", out var title) ? title?.ToString() ?? string.Empty : string.Empty,
-                    CaseId = result.Document.TryGetValue("caseId", out var caseId) ? caseId?.ToString() ?? string.Empty : string.Empty,
+                    ContractId = result.Document.TryGetValue("contractId", out var contractId) ? contractId?.ToString() ?? string.Empty : string.Empty,
                     FileName = result.Document.TryGetValue("fileName", out var fileName) ? fileName?.ToString() ?? string.Empty : string.Empty
                 });
             }
@@ -79,7 +79,7 @@ public sealed class QueryAiSearchSkillFunction(SearchClientFactory searchClientF
                 HttpStatusCode.OK,
                 new QueryAiSearchResponse
                 {
-                    CaseId = queryRequest.CaseId,
+                    ContractId = queryRequest.ContractId,
                     Count = documents.Count,
                     TotalCount = results.Value.TotalCount,
                     Results = documents

@@ -5,10 +5,10 @@
   "skills": [
     {
       "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
-      "name": "GetCaseSkill",
-      "description": "Extracts the case ID and file name from the document's blob storage name",
+      "name": "GetContractSkill",
+      "description": "Extracts the contract ID and file name from the document's blob storage name",
       "context": "/document",
-      "uri": "https://alexz1008-alcohrs-fa-eybpfcgzemb2dwg6.westus-01.azurewebsites.net/api/GetCaseSkill?code=<function-key>",
+      "uri": "https://alexz1008-alcohrs-fa-eybpfcgzemb2dwg6.westus-01.azurewebsites.net/api/GetContractSkill?code=<function-key>",
       "httpMethod": "POST",
       "timeout": "PT30S",
       "batchSize": 1,
@@ -20,8 +20,8 @@
       ],
       "outputs": [
         {
-          "name": "caseId",
-          "targetName": "caseId"
+          "name": "contractId",
+          "targetName": "contractId"
         },
         {
           "name": "fileName",
@@ -100,8 +100,8 @@
             "inputs": []
           },
           {
-            "name": "caseId",
-            "source": "/document/caseId",
+            "name": "contractId",
+            "source": "/document/contractId",
             "inputs": []
           },
           {

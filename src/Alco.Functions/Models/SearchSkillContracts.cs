@@ -31,7 +31,7 @@ public sealed class SearchSkillResponseRecord
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public CaseSkillResponseData? Data { get; init; }
+    public ContractSkillResponseData? Data { get; init; }
 
     [JsonPropertyName("errors")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -48,10 +48,10 @@ public sealed class SearchSkillMessage
     public string Message { get; init; } = string.Empty;
 }
 
-public sealed class CaseSkillResponseData
+public sealed class ContractSkillResponseData
 {
-    [JsonPropertyName("caseId")]
-    public string CaseId { get; init; } = string.Empty;
+    [JsonPropertyName("contractId")]
+    public string ContractId { get; init; } = string.Empty;
 
     [JsonPropertyName("fileName")]
     public string FileName { get; init; } = string.Empty;

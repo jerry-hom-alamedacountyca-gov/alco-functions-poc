@@ -1,10 +1,10 @@
 namespace Alco.Functions.Services;
 
-public sealed class CaseIdParser
+public sealed class ContractIdParser
 {
-    public bool TryExtract(string fileName, out string? caseId)
+    public bool TryExtract(string fileName, out string? contractId)
     {
-        caseId = null;
+        contractId = null;
 
         var normalizedFileName = BlobFileNameResolver.ExtractFileName(fileName) ?? fileName;
         var baseName = Path.GetFileNameWithoutExtension(normalizedFileName);
@@ -25,7 +25,7 @@ public sealed class CaseIdParser
             return false;
         }
 
-        caseId = segments[^2];
-        return !string.IsNullOrWhiteSpace(caseId);
+        contractId = segments[^2];
+        return !string.IsNullOrWhiteSpace(contractId);
     }
 }

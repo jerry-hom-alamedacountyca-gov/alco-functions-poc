@@ -8,9 +8,9 @@ public sealed class QueryAiSearchRequest
     [JsonPropertyName("query")]
     public string Query { get; init; } = string.Empty;
 
-    /// <summary>The case ID to scope the search to a specific case's documents.</summary>
-    [JsonPropertyName("caseId")]
-    public string CaseId { get; init; } = string.Empty;
+    /// <summary>The contract ID to scope the search to a specific contract's documents.</summary>
+    [JsonPropertyName("contractId")]
+    public string ContractId { get; init; } = string.Empty;
 
     /// <summary>Maximum number of results to return. Defaults to 5, maximum 50.</summary>
     [JsonPropertyName("top")]
@@ -19,9 +19,9 @@ public sealed class QueryAiSearchRequest
 
 public sealed class QueryAiSearchResponse
 {
-    /// <summary>The case ID used to filter the search.</summary>
-    [JsonPropertyName("caseId")]
-    public string CaseId { get; init; } = string.Empty;
+    /// <summary>The contract ID used to filter the search.</summary>
+    [JsonPropertyName("contractId")]
+    public string ContractId { get; init; } = string.Empty;
 
     /// <summary>Number of results returned.</summary>
     [JsonPropertyName("count")]
@@ -31,12 +31,12 @@ public sealed class QueryAiSearchResponse
     [JsonPropertyName("totalCount")]
     public long? TotalCount { get; init; }
 
-    /// <summary>Matching document chunks with their case metadata.</summary>
+    /// <summary>Matching document chunks with their contract metadata.</summary>
     [JsonPropertyName("results")]
-    public List<CaseSearchResult> Results { get; init; } = [];
+    public List<ContractSearchResult> Results { get; init; } = [];
 }
 
-public sealed class CaseSearchResult
+public sealed class ContractSearchResult
 {
     /// <summary>The text content of the document chunk.</summary>
     [JsonPropertyName("chunk")]
@@ -46,9 +46,9 @@ public sealed class CaseSearchResult
     [JsonPropertyName("title")]
     public string Title { get; init; } = string.Empty;
 
-    /// <summary>The case ID this document belongs to.</summary>
-    [JsonPropertyName("caseId")]
-    public string CaseId { get; init; } = string.Empty;
+    /// <summary>The contract ID this document belongs to.</summary>
+    [JsonPropertyName("contractId")]
+    public string ContractId { get; init; } = string.Empty;
 
     /// <summary>The blob storage file name of the source document.</summary>
     [JsonPropertyName("fileName")]

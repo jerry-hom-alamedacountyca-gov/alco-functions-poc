@@ -2,7 +2,7 @@ using Alco.Functions.Models;
 
 namespace Alco.Functions.Services;
 
-public sealed class CaseSkillProcessor(BlobFileNameResolver fileNameResolver, CaseIdParser caseIdParser)
+public sealed class ContractSkillProcessor(BlobFileNameResolver fileNameResolver, ContractIdParser contractIdParser)
 {
     public async Task<SearchSkillResponse> ProcessAsync(SearchSkillRequest request, CancellationToken cancellationToken)
     {
@@ -23,18 +23,18 @@ public sealed class CaseSkillProcessor(BlobFileNameResolver fileNameResolver, Ca
                 continue;
             }
 
-            if (!caseIdParser.TryExtract(fileName, out var caseId))
+            if (!contractIdParser.TryExtract(fileName, out var contractId))
             {
-                response.Values.Add(CreateError(record.RecordId, $"Could not extract a case id from file name '{fileName}'."));
+                response.Values.Add(CreateError(record.RecordId, $"Could not extract a contract id from file name '{fileName}'."));
                 continue;
             }
 
             response.Values.Add(new SearchSkillResponseRecord
             {
                 RecordId = record.RecordId,
-                Data = new CaseSkillResponseData
+                Data = new ContractSkillResponseData
                 {
-                    CaseId = caseId!,
+                    ContractId = contractId!,
                     FileName = fileName
                 }
             });

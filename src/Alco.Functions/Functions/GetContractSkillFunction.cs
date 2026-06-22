@@ -8,9 +8,9 @@ using System.Text.Json;
 
 namespace Alco.Functions.Functions;
 
-public sealed class GetCaseSkillFunction(CaseSkillProcessor processor, ILogger<GetCaseSkillFunction> logger)
+public sealed class GetContractSkillFunction(ContractSkillProcessor processor, ILogger<GetContractSkillFunction> logger)
 {
-    [Function("GetCaseSkill")]
+    [Function("GetContractSkill")]
     public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData request,
         CancellationToken cancellationToken)

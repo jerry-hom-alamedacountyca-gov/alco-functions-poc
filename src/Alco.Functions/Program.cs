@@ -12,9 +12,9 @@ var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
     .ConfigureServices((context, services) =>
     {
-        services.AddSingleton<CaseIdParser>();
+        services.AddSingleton<ContractIdParser>();
         services.AddSingleton<BlobFileNameResolver>();
-        services.AddSingleton<CaseSkillProcessor>();
+        services.AddSingleton<ContractSkillProcessor>();
         services.AddSingleton<SearchClientFactory>();
         services.AddSingleton<BlobServiceClientFactory>();
     })

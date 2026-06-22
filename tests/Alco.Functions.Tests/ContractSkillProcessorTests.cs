@@ -5,12 +5,12 @@ using System.Text.Json;
 
 namespace Alco.Functions.Tests;
 
-public sealed class CaseSkillProcessorTests
+public sealed class ContractSkillProcessorTests
 {
     private static readonly IConfiguration EmptyConfiguration = new ConfigurationBuilder().Build();
 
     [Fact]
-    public async Task ProcessAsync_ExtractsCaseIdFromMetadataStoragePath()
+    public async Task ProcessAsync_ExtractsContractIdFromMetadataStoragePath()
     {
         var processor = CreateProcessor();
         var request = new SearchSkillRequest
@@ -33,13 +33,13 @@ public sealed class CaseSkillProcessorTests
 
         var record = Assert.Single(response.Values);
         Assert.NotNull(record.Data);
-        Assert.Equal("ABC123", record.Data!.CaseId);
+        Assert.Equal("ABC123", record.Data!.ContractId);
         Assert.Equal("intake_packet_ABC123_4.pdf", record.Data.FileName);
         Assert.Null(record.Errors);
     }
 
     [Fact]
-    public async Task ProcessAsync_ReturnsErrorWhenCaseIdCannotBeExtracted()
+    public async Task ProcessAsync_ReturnsErrorWhenContractIdCannotBeExtracted()
     {
         var processor = CreateProcessor();
         var request = new SearchSkillRequest
@@ -63,7 +63,7 @@ public sealed class CaseSkillProcessorTests
         var record = Assert.Single(response.Values);
         Assert.Null(record.Data);
         var error = Assert.Single(record.Errors!);
-        Assert.Contains("Could not extract a case id", error.Message);
+        Assert.Contains("Could not extract a contract id", error.Message);
     }
 
     [Theory]
@@ -71,24 +71,24 @@ public sealed class CaseSkillProcessorTests
     [InlineData("https://storage.example.com/folder/claim_summary_CASE777_001.pdf?sas=token", "CASE777")]
     public void TryExtract_ReturnsSecondToLastSegmentBeforePageNumber(string fileName, string expectedCaseId)
     {
-        var parser = new CaseIdParser();
+        var parser = new ContractIdParser();
 
-        var extracted = parser.TryExtract(fileName, out var caseId);
+        var extracted = parser.TryExtract(fileName, out var contractId);
 
         Assert.True(extracted);
-        Assert.Equal(expectedCaseId, caseId);
+        Assert.Equal(expectedCaseId, contractId);
     }
 
     [Fact]
-    public void BuildCaseIdFilter_EscapesSingleQuotes()
+    public void BuildContractIdFilter_EscapesSingleQuotes()
     {
-        var filter = SearchFilterBuilder.BuildCaseIdFilter("CASE'42");
+        var filter = SearchFilterBuilder.BuildContractIdFilter("CONTRACT'42");
 
-        Assert.Equal("caseId eq 'CASE''42'", filter);
+        Assert.Equal("contractId eq 'CONTRACT''42'", filter);
     }
 
-    private static CaseSkillProcessor CreateProcessor() =>
-        new(new BlobFileNameResolver(new BlobServiceClientFactory(EmptyConfiguration), EmptyConfiguration), new CaseIdParser());
+    private static ContractSkillProcessor CreateProcessor() =>
+        new(new BlobFileNameResolver(new BlobServiceClientFactory(EmptyConfiguration), EmptyConfiguration), new ContractIdParser());
 
     private static JsonElement ParseJson(string json) => JsonDocument.Parse(json).RootElement.Clone();
 }
